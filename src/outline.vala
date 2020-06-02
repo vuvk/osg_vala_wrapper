@@ -1,17 +1,5 @@
 
 
-extern void* _node_read_node_file(string file_name);
-class Node : OSGObject {
-
-    internal Node.from_handle(void* handle) {
-        base.from_handle(handle);
-    }
-
-    public Node.from_file(string filename) {
-        handle = _node_read_node_file(filename);
-    }
-}
-
 
 extern void* _group_new();
 extern void  _group_add_child(void* group, void* child);

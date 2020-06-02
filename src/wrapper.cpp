@@ -9,12 +9,6 @@
 
 extern "C" 
 {
-	
-void* _node_read_node_file(const char* file_name) 
-{
-    std::string real_name(file_name);
-	return (void*)osgDB::readNodeFile(real_name);
-}
 
 void* _group_new() 
 {
