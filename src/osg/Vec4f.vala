@@ -27,7 +27,6 @@ public class Vec4f : OSGObject {
 
     internal Vec4f.from_handle(void* handle) {
         base.from_handle(handle);
-        set_disposable(true);
     }
 
     public Vec4f.from_vec4f(Vec4f vec) {
