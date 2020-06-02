@@ -23,4 +23,4 @@ sources = []
 
 subdir('src')
 
-executable('app_name', sources, dependencies: dependencies)
+executable('osgoutline', outline_sources, dependencies: dependencies)
