@@ -1,5 +1,6 @@
 
 extern void* _outline_new();
+extern void  _outline_dispose(void* outline);
 extern void  _outline_set_width(void* outline, float w);
 extern void  _outline_set_color(void* outline, void* vec4f);
 extern void  _outline_add_child(void* outline, void* node);
@@ -12,6 +13,14 @@ public class Outline : Effect {
 
     public Outline () {
         handle = _outline_new();
+    }
+
+    protected override void dispose_handle() {
+        _outline_dispose(handle);
+    }
+
+    ~Outline() {
+        base.dispose();
     }
 
     public void set_width(float width) {

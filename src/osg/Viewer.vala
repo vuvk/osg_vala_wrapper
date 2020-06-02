@@ -4,6 +4,7 @@ extern void  _viewer_dispose(void* viewer);
 extern void  _viewer_set_scene_data(void* viewer, void* node);
 extern void* _viewer_get_camera(void* viewer);
 extern void  _viewer_run(void* viewer);
+
 public class Viewer : OSGObject {
     private Camera camera;
 

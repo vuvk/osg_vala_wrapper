@@ -12,8 +12,6 @@ void* _node_new()
 void _node_dispose(void* node)
 {
     static_cast<osg::Node*>(node)->unref();
-    void** ptr = &node;
-    *ptr = NULL;
 }
 
 void* _node_get_parent(void* node, int num) 

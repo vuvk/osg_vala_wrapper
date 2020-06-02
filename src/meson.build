@@ -1,8 +1,5 @@
-subdir('osg')
 
-sources += files(
-    'wrapper.cpp',
-)
+subdir('osg')
 
 outline_sources = sources + files(
     'outline.vala',
