@@ -6,12 +6,9 @@ extern void* _viewer_get_camera(void* viewer);
 extern void  _viewer_run(void* viewer);
 
 public class Viewer : OSGObject {
-    private Camera camera;
 
     public Viewer() {
         handle = _viewer_new();
-        camera = new Camera.from_handle(_viewer_get_camera(handle));
-        set_disposable(true);
     }
 
     protected override void dispose_handle() {
@@ -27,7 +24,7 @@ public class Viewer : OSGObject {
     }
 
     public Camera get_camera() {
-        return camera;
+        return new Camera.from_handle(_viewer_get_camera(handle));
     }
 
     public void run() {
