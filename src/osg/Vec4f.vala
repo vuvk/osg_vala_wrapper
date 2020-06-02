@@ -75,18 +75,22 @@ public class Vec4f : OSGObject {
         return _vec4f_as_abgr(handle);
     }
 
+    /** Returns true if all components have values that are not NaN. */
     public bool is_nan() {
         return _vec4f_is_nan(handle);
     }
 
+    /** Returns true if at least one component has value NaN. */
     public bool valid() {
         return _vec4f_valid(handle);
     }
     
+    /** Dot product. */
     public float dot(Vec4f vec) {
         return _vec4f_dot(handle, vec.handle);
     }
 
+    /** Multiply by scalar. */
     public Vec4f mul(float scalar) {
         float x = this.x() * scalar,
               y = this.y() * scalar,
@@ -96,6 +100,7 @@ public class Vec4f : OSGObject {
         return new Vec4f(x, y, z, w);
     }
 
+    /** Divide by scalar. */
     public Vec4f div(float scalar) {
         if (scalar == 0.0f) {
             return new Vec4f();
@@ -111,6 +116,7 @@ public class Vec4f : OSGObject {
         return new Vec4f(x, y, z, w);
     }
 
+    /** Binary vector add. */
     public Vec4f add(Vec4f vec) {   
         float x = this.x() + vec.x(),
               y = this.y() + vec.y(),
@@ -120,6 +126,7 @@ public class Vec4f : OSGObject {
         return new Vec4f(x, y, z, w);
     }
 
+    /** Binary vector subtract. */
     public Vec4f sub(Vec4f vec) {   
         float x = this.x() - vec.x(),
               y = this.y() - vec.y(),
@@ -129,19 +136,34 @@ public class Vec4f : OSGObject {
         return new Vec4f(x, y, z, w);
     }
 
+    /** Negation operator. Returns the negative of the Vec4f. */
     public Vec4f neg() {
         return new Vec4f(-x(), -y(), -z(), -w());
     }
     
+    /** Length of the vector = sqrt( vec . vec ) */
     public float length() {
         return _vec4f_length(handle);
     }
     
+    /** Length squared of the vector = vec . vec */
     public float length2() {
         return _vec4f_length2(handle);
     }
-    
+
+    /** Normalize the vector so that it has length unity.
+      * Returns the previous length of the vector.
+    */
     public float normalize() {
         return _vec4f_normalize(handle);
+    }
+
+    /** Normalize the vector.
+      * Returns new normalized vector.
+    */
+    public Vec4f normalize2() {
+        Vec4f normal = this.cpy();
+        normal.normalize();
+        return normal;
     }
 }
