@@ -1,7 +1,7 @@
 
 
 extern void* _vec4f_new_from_float(float x, float y, float z, float w);
-extern void  _vec4f_destroy(void* vec);
+extern void  _vec4f_dispose(void* vec);
 extern bool  _vec4f_equals(void* vec1, void* vec2);
 extern bool  _vec4f_less(void* vec1, void* vec2);
 extern void  _vec4f_set(void* vec, float x, float y, float z, float w);
@@ -27,18 +27,23 @@ public class Vec4f : OSGObject {
 
     internal Vec4f.from_handle(void* handle) {
         base.from_handle(handle);
+        set_disposable(true);
     }
 
     public Vec4f.from_vec4f(Vec4f vec) {
-        handle = _vec4f_new_from_float(vec.x(), vec.y(), vec.z(), vec.w());
+        this(vec.x(), vec.y(), vec.z(), vec.w());
     }
 
     public Vec4f(float x = 0, float y = 0, float z = 0, float w = 0) {
-        handle = _vec4f_new_from_float(x, y, z, w);
+        this.from_handle(_vec4f_new_from_float(x, y, z, w));
+    }
+
+    protected override void dispose_handle () {
+        _vec4f_dispose(handle);
     }
 
     ~Vec4f() {
-        _vec4f_destroy(handle);
+        base.dispose();
     }
 
     public Vec4f cpy() {

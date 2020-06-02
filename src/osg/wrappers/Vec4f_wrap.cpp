@@ -10,9 +10,11 @@ void* _vec4f_new_from_float(float x, float y, float z, float w)
     return (void*)new osg::Vec4f(x, y, z, w);
 }
 
-void _vec4f_destroy(void* vec)
+void _vec4f_dispose(void* vec)
 {
     delete static_cast<osg::Vec4f*>(vec);
+    void** ptr = &vec;
+    *ptr = NULL;
 }
 
 bool _vec4f_equals(void* vec1, void* vec2) 
