@@ -9,6 +9,13 @@ void* _node_new()
     return (void*) new osg::Node();
 }
 
+void _node_dispose(void* node)
+{
+    static_cast<osg::Node*>(node)->unref();
+    void** ptr = &node;
+    *ptr = NULL;
+}
+
 void* _node_get_parent(void* node, int num) 
 {
     return (void*) static_cast<osg::Node*>(node)->getParent(num);
