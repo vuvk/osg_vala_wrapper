@@ -8,7 +8,6 @@ public class Group : Node {
 
     internal Group.from_handle(void* handle) {
         base.from_handle(handle);
-        set_disposable(true);
     }
 
     public Group() {
