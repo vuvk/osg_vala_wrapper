@@ -1,0 +1,32 @@
+{
+    "files.associations": {
+        "readfile": "cpp",
+        "group": "cpp",
+        "referenced": "cpp",
+        "outline": "cpp",
+        "effect": "cpp",
+        "technique": "cpp",
+        "framebufferobject": "cpp",
+        "node": "cpp",
+        "object": "cpp",
+        "viewer": "cpp",
+        "view": "cpp",
+        "camera": "cpp",
+        "transform": "cpp",
+        "displaysettings": "cpp",
+        "graphicscontext": "cpp",
+        "lod": "cpp",
+        "nodevisitor": "cpp",
+        "renderinfo": "cpp",
+        "cameramanipulator": "cpp",
+        "export": "cpp",
+        "cullvisitor": "cpp",
+        "intersectionvisitor": "cpp",
+        "renderstage": "cpp",
+        "sceneview": "cpp",
+        "viewerbase": "cpp",
+        "vec4f": "cpp",
+        "vec3f": "cpp",
+        "math": "cpp"
+    }
+}
