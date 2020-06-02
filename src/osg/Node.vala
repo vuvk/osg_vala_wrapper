@@ -24,7 +24,6 @@ public class Node : OSGObject {
 
     internal Node.from_handle(void* handle) {
         base.from_handle(handle);
-        set_disposable(true);
     }
 
     public Node.from_file(string filename) {
