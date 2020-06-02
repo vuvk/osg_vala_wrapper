@@ -72,35 +72,53 @@ inline void _image_allocate_image(void* image, int s, int t, int r, GLenum pixel
     return static_cast<osg::Image*>(image)->allocateImage(s, t, r, pixel_format, type, packing);
 }
 
-
 /** Set the image dimensions, format and data. */
-virtual void setImage(int s,int t,int r,
-                GLint internalTextureformat,
-                GLenum pixelFormat,GLenum type,
-                unsigned char* data,
-                AllocationMode mode,
-                int packing=1, int rowLength=0);
+inline void _image_set_image(void* image, int s, int t, int r, 
+                            GLint internal_textureformat, GLenum pixel_format, GLenum type, unsigned char* data,
+                            int mode,
+                            int packing /*=1*/, int row_length /*=0*/)
+{
+    static_cast<osg::Image*>(image)->setImage(s, t, r, internal_textureformat, pixel_format, type, data, (osg::Image::AllocationMode) packing, row_length);
+}
 
 /** Read pixels from current frame buffer at specified position and size, using glReadPixels.
      * Create memory for storage if required, reuse existing pixel coords if possible.
 */
-virtual void readPixels(int x,int y,int width,int height,
-                GLenum pixelFormat, GLenum type, int packing=1);
+inline void _image_read_pixels(void* image, int x, int y, int width, int height, 
+                            GLenum pixel_format, GLenum type, int packing /*=1*/)
+{
+    static_cast<osg::Image*>(image)->readPixels(x, y, width, height, pixel_format, type, packing);
+}
 
 
 /** Read the contents of the current bound texture, handling compressed pixelFormats if present.
      * Create memory for storage if required, reuse existing pixel coords if possible.
 */
-virtual void readImageFromCurrentTexture(unsigned int contextID, bool copyMipMapsIfAvailable, GLenum type = GL_UNSIGNED_BYTE, unsigned int face = 0);
+inline void _image_read_image_from_current_texture(void* image, unsigned int context_id, bool copy_mip_maps_if_available, 
+                                                    GLenum type /* = GL_UNSIGNED_BYTE*/, unsigned int face /*= 0*/)
+{
+    static_cast<osg::Image*>(image)->readImageFromCurrentTexture(context_id, copy_mip_maps_if_available, type, face);
+}
 
 /** swap the data and settings between two image objects.*/
-void swap(osg::Image& rhs);
+inline void _image_swap(void* img1, void* img2)
+{
+    osg::Image* image1 = static_cast<osg::Image*>(img1);
+    osg::Image* image2 = static_cast<osg::Image*>(img2);
+    image1->swap(*image2);
+}
 
 /** Scale image to specified size. */
-void scaleImage(int s,int t,int r) { scaleImage(s,t,r, getDataType()); }
+inline void _image_scale_image(void* image, int s, int t, int r) 
+{
+    static_cast<osg::Image*>(image)->scaleImage(s, t, r);
+}
 
 /** Scale image to specified size and with specified data type. */
-virtual void scaleImage(int s,int t,int r, GLenum newDataType);
+inline void _image_scale_image_with_data_type(void* image, int s, int t, int r, GLenum new_data_type) 
+{
+    static_cast<osg::Image*>(image)->scaleImage(s, t, r, new_data_type);
+}
 
 /** Copy a source Image into a subpart of this Image at specified position.
      * Typically used to copy to an already allocated image, such as creating
@@ -109,34 +127,44 @@ virtual void scaleImage(int s,int t,int r, GLenum newDataType);
      * accommodate the source image in its offset position.
      * If source is NULL then no operation happens, this Image is left unchanged.
 */
-virtual void copySubImage(int s_offset, int t_offset, int r_offset, const osg::Image* source);
-
-
-enum Origin
+inline void _image_copy_sub_image(void* image, int s_offset, int t_offset, int r_offset, const void* source)
 {
-    BOTTOM_LEFT,
-    TOP_LEFT
-};
+    static_cast<osg::Image*>(image)->copySubImage(s_offset, t_offset, r_offset, static_cast<const osg::Image*>(source));
+}
 
 /** Set the origin of the image.
      * The default value is BOTTOM_LEFT and is consistent with OpenGL.
      * TOP_LEFT is used for imagery that follows standard Imagery convention, such as movies,
      * and hasn't been flipped yet.  For such images one much flip the t axis of the tex coords.
      * to handle this origin position. */
-void setOrigin(Origin origin) { _origin = origin; }
+inline void _image_set_origin(void* image, int origin) 
+{
+    static_cast<osg::Image*>(image)->setOrigin((osg::Image::Origin) origin);
+}
 
 /** Get the origin of the image.*/
-Origin getOrigin() const { return _origin; }
-
+inline int _image_get_origin(void* image)
+{
+    return static_cast<osg::Image*>(image)->getOrigin();
+}
 
 /** Width of image. */
-inline int s() const { return _s; }
+inline int _image_s(void* image) 
+{ 
+    return static_cast<osg::Image*>(image)->s();
+}
 
 /** Height of image. */
-inline int t() const { return _t; }
+inline int _image_t(void* image)
+{
+    return static_cast<osg::Image*>(image)->t();
+}
 
 /** Depth of image. */
-inline int r() const { return _r; }
+inline int _image_r(void* image) 
+{ 
+    return static_cast<osg::Image*>(image)->r(); 
+}
 
 void setRowLength(int length);
 inline int getRowLength() const { return _rowLength; }
