@@ -1,24 +1,6 @@
 
 
 
-extern void* _group_new();
-extern void  _group_add_child(void* group, void* child);
-class Group : Node {
-
-    internal Group.from_handle(void* handle) {
-        base.from_handle(handle);
-    }
-
-    public Group() {
-        handle = _group_new();
-    }
-
-    public virtual void add_child(Node child) {
-        _group_add_child(handle, child.handle);
-    }
-
-}
-
 class Effect : Group {
 
 }
@@ -78,6 +60,7 @@ class Camera : Transform {
 }
 
 extern void* _viewer_new();
+extern void  _viewer_dispose(void* viewer);
 extern void  _viewer_set_scene_data(void* viewer, void* node);
 extern void* _viewer_get_camera(void* viewer);
 extern void  _viewer_run(void* viewer);
@@ -87,6 +70,15 @@ class Viewer : OSGObject {
     public Viewer() {
         handle = _viewer_new();
         camera = new Camera.from_handle(_viewer_get_camera(handle));
+        set_disposable(true);
+    }
+
+    protected override void dispose_handle() {
+        _viewer_dispose(handle);
+    }
+
+    ~Viewer() {
+        base.dispose();
     }
 
     public void set_scene_data(Node node) {

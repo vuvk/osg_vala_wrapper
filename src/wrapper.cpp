@@ -10,16 +10,6 @@
 extern "C" 
 {
 
-void* _group_new() 
-{
-	return (void*)new osg::Group;
-}
-
-void _group_add_child(void* group, void* child)
-{
-	static_cast<osg::Group*>(group)->addChild((osg::Node*)child);
-}
-
 void* _outline_new()
 {
 	return (void*)new osgFX::Outline;
@@ -48,6 +38,13 @@ void _display_settings_set_minimum_num_stencil_bits(int num)
 void* _viewer_new()
 {
     return (void*)new osgViewer::Viewer();
+}
+
+void _viewer_dispose(void* viewer)
+{
+    static_cast<osgViewer::Viewer*>(viewer)->unref();
+    void** ptr = &viewer;
+    *ptr = NULL;
 }
 
 void _viewer_set_scene_data(void* viewer, void* node)

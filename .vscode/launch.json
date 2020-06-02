@@ -8,7 +8,7 @@
             "name": "Debug",
             "type": "gdb",
             "request": "launch",
-            "target": "./outline_test",
+            "target": "./build/osgoutline",
             "cwd": "${workspaceRoot}",
             "valuesFormatting": "parseText"
         }
