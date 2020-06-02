@@ -1,8 +1,10 @@
 
+using GL;
+
 extern void* _camera_new();
 extern void  _camera_dispose(void* camera);
-extern int   _camera_get_clear_mask(void* camera);
-extern void  _camera_set_clear_mask(void* camera, int mask);
+extern GLbitfield _camera_get_clear_mask(void* camera);
+extern void  _camera_set_clear_mask(void* camera, GLbitfield mask);
 extern void  _camera_set_clear_stencil(void* camera, int stencil);
 
 public class Camera : Transform {
@@ -23,11 +25,11 @@ public class Camera : Transform {
         base.dispose();
     }
 
-    public int get_clear_mask() {
+    public GLbitfield get_clear_mask() {
         return _camera_get_clear_mask(handle);
     }
 
-    public void set_clear_mask(int mask) {
+    public void set_clear_mask(GLbitfield mask) {
         _camera_set_clear_mask(handle, mask);
     }
 

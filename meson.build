@@ -8,7 +8,7 @@ dependencies = [
     dependency('glib-2.0'),
     dependency('gobject-2.0'),
 #    dependency('gio-2.0'),    
-#    dependency('gl'),
+    dependency('gl'),
     dependency('osg'),
     dependency('osgDB'),
     dependency('osgFX'),
@@ -16,8 +16,8 @@ dependencies = [
     m_dep
 ]
 
-#vapi_dir = meson.current_source_dir() / 'vapi'
-#add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
+vapi_dir = meson.current_source_dir() / 'vapi'
+add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 
 sources = []
 
