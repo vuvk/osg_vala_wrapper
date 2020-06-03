@@ -82,20 +82,20 @@ public class Image : OSGObject {
 
     public GLvoid* get_data_pointer() {
         return _image_get_data_pointer(handle);
-	}
+    }
 
     public uint get_total_data_size() {
         return _image_get_total_data_size(handle);
-	}
+    }
 
     /** Return -1 if *this < *rhs, 0 if *this==*rhs, 1 if *this>*rhs. */
     public int compare(Image image) {
         return _image_compare(handle, image.handle);
-	}
+    }
 
     public void set_file_name(string file_name) {
         _image_set_file_name(handle, file_name);
-	}
+    }
 
     public unowned string get_file_name() {
         return _image_get_file_name(handle);
@@ -109,7 +109,7 @@ public class Image : OSGObject {
 
     public void set_write_hint(WriteHint write_hint)  {
         _image_set_write_hint(handle, write_hint);
-	}
+    }
 
     public WriteHint get_write_hint() {
         return (WriteHint) _image_get_write_hint(handle);
@@ -124,17 +124,17 @@ public class Image : OSGObject {
     /** Set the method used for deleting data once it goes out of scope. */
     public void set_allocation_mode(AllocationMode mode) {
         _image_set_allocation_mode(handle, mode);
-	}
+    }
 
     /** Get the method used for deleting data once it goes out of scope. */
     public AllocationMode get_allocation_mode() {
         return (AllocationMode) _image_get_allocation_mode(handle);
-	}
+    }
 
     /** Allocate a pixel block of specified size and type. */
     public void allocate_image(int s, int t, int r, GLenum pixel_format, GLenum type, int packing = 1) {
         _image_allocate_image(handle, s, t, r, pixel_format, type, packing);
-	}
+    }
 
     /** Set the image dimensions, format and data. */
     public void set_image(int s, int t, int r, 
@@ -142,7 +142,7 @@ public class Image : OSGObject {
                         AllocationMode mode,
                         int packing = 1, int row_length = 0) {
         _image_set_image(handle, s, t, r, internal_textureformat, pixel_format, type, data, mode, packing, row_length);
-	}
+    }
 
     /** Read pixels from current frame buffer at specified position and size, using glReadPixels.
         * Create memory for storage if required, reuse existing pixel coords if possible.
@@ -150,7 +150,7 @@ public class Image : OSGObject {
     public void read_pixels(int x, int y, int width, int height, 
                             GLenum pixel_format, GLenum type, int packing = 1) {
         _image_read_pixels(handle, x, y, width, height, pixel_format, type, packing);
-	}
+    }
 
     /** Read the contents of the current bound texture, handling compressed pixelFormats if present.
         * Create memory for storage if required, reuse existing pixel coords if possible.
@@ -158,22 +158,22 @@ public class Image : OSGObject {
     public void read_image_from_current_texture(uint context_id, bool copy_mip_maps_if_available, 
                                         GLenum type = GL_UNSIGNED_BYTE, uint face = 0) {
         _image_read_image_from_current_texture(handle, context_id,copy_mip_maps_if_available, type, face);            
-	}
+    }
 
     /** swap the data and settings between two image objects.*/
     public void swap(Image image) {
         _image_swap(handle, image.handle);
-	}
+    }
 
     /** Scale image to specified size. */
     public void scale_image(int s, int t, int r) {
         _image_scale_image(handle, s, t, r);
-	}
+    }
 
     /** Scale image to specified size and with specified data type. */
     public void scale_image_with_data_type(int s, int t, int r, GLenum new_data_type) {
         _image_scale_image_with_data_type(handle, s, t, r, new_data_type);
-	}
+    }
 
     /** Copy a source Image into a subpart of this Image at specified position.
         * Typically used to copy to an already allocated image, such as creating
@@ -198,150 +198,150 @@ public class Image : OSGObject {
         * to handle this origin position. */
     public void set_origin(Origin origin) {
         _image_set_origin(handle, origin);
-	}
+    }
 
     /** Get the origin of the image.*/
     public int get_origin() {
         return (Origin) _image_get_origin(handle);
-	}
+    }
 
     /** Width of image. */
     public int s() {
         return _image_s(handle);
-	}
+    }
 
     /** Height of image. */
     public int t() {
         return _image_t(handle);
-	}
+    }
 
     /** Depth of image. */
     public int r() {
         return _image_r(handle);
-	}
+    }
 
     public void set_row_length(int length) {
         _image_set_row_length(handle, length);
-	}
+    }
 
     public int get_row_length()  {
         return _image_get_row_length(handle);
-	}
+    }
 
     public void set_internal_texture_format(GLint format) {
         _image_set_internal_texture_format(handle, format);
-	}
+    }
 
     public GLint get_internal_texture_format() {
         return _image_get_internal_texture_format(handle);
-	}
+    }
 
     public void set_pixel_format(GLenum format) {
         _image_set_pixel_format(handle, format);
-	}
+    }
 
     public GLenum get_pixel_format() {
         return _image_get_pixel_format(handle);
-	}
+    }
 
     public void set_data_type(GLenum type) {
         _image_set_data_type(handle, type);
-	}
+    }
 
     public GLenum get_data_type() {
         return _image_get_data_type(handle);
-	}
+    }
 
     public void set_packing(uint packing) {
         _image_set_packing(handle, packing);
-	}
+    }
 
     public uint get_packing() {
         return _image_get_packing(handle);
-	}
+    }
 
     /** Return true of the pixel format is an OpenGL compressed pixel format.*/
     public bool is_compressed() {
         return _image_is_compressed(handle);
-	}
+    }
 
     /** Set the pixel aspect ratio, defined as the pixel width divided by the pixel height.*/
     public void set_pixel_aspect_ratio(float pixel_aspect_ratio) {
         _image_set_pixel_aspect_ratio(handle, pixel_aspect_ratio);
-	}
+    }
 
     /** Get the pixel aspect ratio.*/
     public float get_pixel_aspect_ratio() {
         return _image_get_pixel_aspect_ratio(handle);
-	}
+    }
 
     /** Return the number of bits required for each pixel. */
     public uint get_pixel_size_in_bits() {
         return _image_get_pixel_size_in_bits(handle);
-	}
+    }
 
     /** Return the number of bytes each row of pixels occupies once it has been packed. */
     public uint get_row_size_in_bytes() {
         return _image_get_row_size_in_bytes(handle);
-	}
+    }
 
     /** Return the number of bytes between each successive row.
         * Note, getRowSizeInBytes() will only equal getRowStepInBytes() when isDataContiguous() return true. */
     public uint get_row_step_in_bytes() {
         return _image_get_row_step_in_bytes(handle);
-	}
+    }
 
     /** Return the number of bytes each image (_s*_t) of pixels occupies. */
     public uint get_image_size_in_bytes() {
         return _image_get_image_size_in_bytes(handle);
-	}
+    }
 
     /** Return the number of bytes between each successive image.
         * Note, getImageSizeInBytes() will only equal getImageStepInBytes() when isDataContiguous() return true. */
     public uint get_image_step_in_bytes() {
         return _image_get_image_step_in_bytes(handle);
-	}
+    }
 
     /** Return the number of bytes the whole row/image/volume of pixels occupies. */
     public uint get_total_size_in_bytes() {
         return _image_get_total_size_in_bytes(handle);
-	}
+    }
 
     /** Return the number of bytes the whole row/image/volume of pixels occupies, including all mip maps if included. */
     public uint get_total_size_in_bytes_including_mipmaps() {
         return _image_get_total_size_in_bytes_including_mipmaps(handle);
-	}
+    }
 
     /** Return true if the Image represent a valid and usable imagery.*/
     public bool valid() {
         return _image_valid(handle);
-	}
+    }
 
     /** Raw image data.
         * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
         * take care to access the data per row rather than treating the whole data as a single block. */
     public uint8[] data() {
         return _image_data(handle);
-	}
+    }
 
     /** Raw const image data.
         * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
         * take care to access the data per row rather than treating the whole data as a single block. */
     public uint8[] const_data() {
         return _image_const_data(handle);
-	}
+    }
 
     public uint8[] data_ext(uint column, uint row = 0, uint image = 0) {
         return _image_data_ext(handle, column, row, image);
-	}
+    }
 
     public uint8[] const_data_ext(uint column, uint row = 0, uint image = 0) {
         return _image_const_data_ext(handle, column, row, image);
-	}
+    }
 
     /** return true if the data stored in the image is a contiguous block of data.*/
     public bool is_data_contiguous() {
         return _image_is_data_contiguous(handle);
-	}
+    }
 
 }

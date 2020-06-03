@@ -1,10 +1,10 @@
 subdir('wrappers')
+subdir('Math')
 
 sources += files(
     'OSGObject.vala',
 
     'BufferData.vala',
-    'Vec4f.vala',
     'Node.vala',
     'Transform.vala',
     'Group.vala',
