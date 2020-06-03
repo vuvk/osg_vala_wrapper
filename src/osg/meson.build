@@ -9,6 +9,7 @@ sources += files(
     'Transform.vala',
     'Group.vala',
     'Drawable.vala',
+    'Image.vala',
     'Geometry.vala',
     'Camera.vala',
     'DisplaySettings.vala',
