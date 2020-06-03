@@ -1,4 +1,4 @@
-#include <osg/Vec3f>
+
 #include <osg/Vec4f>
 
 extern "C"
