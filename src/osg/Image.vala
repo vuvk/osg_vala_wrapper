@@ -422,9 +422,8 @@ public class Image : BufferData {
     }
 
     /** return the dimensions of a block of compressed pixels */
-    public static void* compute_block_footprint(GLenum pixel_format) {
-        // TODO (Vec3i)
-        return null;
+    public static Vec3i compute_block_footprint(GLenum pixel_format) {
+        return new Vec3i.from_handle(_image_compute_block_footprint(pixel_format));
     }
 
     /** return the size in bytes of a block of compressed pixels */
