@@ -90,7 +90,7 @@ void _image_read_pixels(void* image, int x, int y, int width, int height,
     static_cast<osg::Image*>(image)->readPixels(x, y, width, height, pixel_format, type, packing);
 }
 
-/** Read the contents of the current bound texture, handling compressed pixelFormats if present.
+/** Read the contents of the current bound texture, handling compressed pixel_formats if present.
      * Create memory for storage if required, reuse existing pixel coords if possible.
 */
 void _image_read_image_from_current_texture(void* image, unsigned int context_id, bool copy_mip_maps_if_available, 
@@ -313,6 +313,187 @@ const unsigned char* _image_const_data_ext(void* image_ptr, unsigned int column,
 bool _image_is_data_contiguous(void* image)
 { 
     return static_cast<osg::Image*>(image)->isDataContiguous(); 
+}
+
+/** Get the color value for specified texcoord.*/
+void* _image_get_color(void* image, unsigned int s, unsigned t /*=0*/, unsigned r/*=0*/)
+{
+    return new osg::Vec4f(static_cast<osg::Image*>(image)->getColor(s, t, r));
+}
+
+/** Set the color value for specified texcoord.*/
+void _image_set_color(void* image, void* color, unsigned int s, unsigned int t/*=0*/, unsigned int r/*=0*/)
+{
+    const osg::Vec4f* vec = static_cast<osg::Vec4f*>(color);
+    static_cast<osg::Image*>(image)->setColor(*vec, s, t, r);
+}
+
+/** Flip the image horizontally, around s dimension. */
+void _image_flip_horizontal(void* image)
+{
+    static_cast<osg::Image*>(image)->flipHorizontal();
+}
+
+/** Flip the image vertically, around t dimension. */
+void _image_flip_vertical(void* image)
+{
+    static_cast<osg::Image*>(image)->flipVertical();
+}
+
+/** Flip the image around the r dimension. Only relevant for 3D textures. */
+void _image_flip_depth(void* image)
+{
+    static_cast<osg::Image*>(image)->flipDepth();
+}
+
+/** Ensure image dimensions are a power of two.
+     * Mipmapped textures require the image dimensions to be
+     * power of two and are within the maximum texture size for
+     * the host machine.
+*/
+void _image_ensure_valid_size_for_texturing(void* image, GLint max_texture_size)
+{
+    static_cast<osg::Image*>(image)->ensureValidSizeForTexturing(max_texture_size);
+}
+
+/*static*/ bool _image_is_packed_type(GLenum type)
+{
+    return osg::Image::isPackedType(type);
+}
+
+/*static*/ GLenum _image_compute_pixel_format(GLenum format)
+{
+    return osg::Image::computePixelFormat(format);
+}
+
+/*static*/ GLenum _image_compute_format_data_type(GLenum format)
+{
+    return osg::Image::computeFormatDataType(format);
+}
+
+/** return the dimensions of a block of compressed pixels */
+/*static*/ void* _image_compute_block_footprint(GLenum pixel_format)
+{
+    return new osg::Vec3i(osg::Image::computeBlockFootprint(pixel_format));;
+}
+
+/** return the size in bytes of a block of compressed pixels */
+/*static*/ unsigned int _image_compute_block_size(GLenum pixel_format, GLenum packing)
+{
+    return osg::Image::computeBlockSize(pixel_format, packing);
+}
+
+/*static*/ unsigned int _image_compute_num_components(GLenum pixel_format)
+{
+    return osg::Image::computeNumComponents(pixel_format);
+}
+
+/*static*/ unsigned int _image_compute_pixel_size_in_bits(GLenum pixel_format, GLenum type)
+{
+    return osg::Image::computePixelSizeInBits(pixel_format, type);
+}
+
+/*static*/ unsigned int _image_compute_row_width_in_bytes(int width, GLenum pixel_format, GLenum type, int packing)
+{
+    return osg::Image::computeRowWidthInBytes(width, pixel_format, type, packing);
+}
+
+/*static*/ unsigned int _image_compute_image_size_in_bytes(int width, int height, int depth, GLenum pixel_format, GLenum type, 
+                                                           int packing /*= 1*/, int slice_packing /*= 1*/, int image_packing /*= 1*/)
+{
+    return osg::Image::computeImageSizeInBytes(width, height, depth, pixel_format, type, packing, slice_packing, image_packing);
+}
+
+/*static*/ int _image_roud_up_to_multiple(int s, int pack)
+{
+    return osg::Image::roudUpToMultiple(s, pack);
+}
+
+/*static*/ int _image_compute_nearest_power_of_two(int s, float bias/*=0.5f*/)
+{
+    return osg::Image::computeNearestPowerOfTwo(s, bias);
+}
+
+/*static*/ int _image_compute_number_of_mipmap_levels(int s, int t /*= 1*/, int r /*= 1*/)
+{
+    return osg::Image::computeNumberOfMipmapLevels(s, t, r);
+}
+
+bool _image_is_mipmap(void* image)
+{
+    return static_cast<osg::Image*>(image)->isMipmap();
+}
+
+unsigned int _image_get_num_mipmap_levels(void* image)
+{
+    return static_cast<osg::Image*>(image)->getNumMipmapLevels();    
+}
+
+/** Send offsets into data. It is assumed that first mipmap offset (index 0) is 0.*/
+void _image_set_mipmap_levels(void* image, const unsigned int* mipmap_data_vector, int length) 
+{ 
+    osg::Image::MipmapDataType vector;
+    for (int i = 0; i < length; ++i) 
+    {
+        vector.push_back(mipmap_data_vector[i]);
+    }
+    static_cast<osg::Image*>(image)->setMipmapLevels(vector);
+}
+
+void _image_get_mipmap_levels(void* image, unsigned int* mipmap_data_vector, int* length)
+{
+    osg::Image::MipmapDataType vector = static_cast<osg::Image*>(image)->getMipmapLevels();
+    *length = vector.size();
+    mipmap_data_vector = new unsigned int[vector.size()];
+    for (int i = 0; i < *length; ++i)
+    {
+        mipmap_data_vector[i] = vector.data()[i];
+    }
+}
+
+unsigned int _image_get_mipmap_offset(void* image, unsigned int mipmap_level)
+{
+    return static_cast<osg::Image*>(image)->getMipmapOffset(mipmap_level);
+}
+
+unsigned char* _image_get_mipmap_data(void* image, unsigned int mipmap_level)
+{
+    return static_cast<osg::Image*>(image)->getMipmapData(mipmap_level);
+}
+
+const unsigned char* _image_get_const_mipmap_data(void* image, unsigned int mipmap_level)
+{
+    return static_cast<osg::Image*>(image)->getMipmapData(mipmap_level);
+}
+
+/** returns false for texture formats that do not support texture subloading */
+bool _image_supports_texture_subloading(void* image)
+{
+    return static_cast<osg::Image*>(image)->supportsTextureSubloading();
+}
+
+/** Return true if this image is translucent - i.e. it has alpha values that are less 1.0 (when normalized). */
+bool _image_is_image_translucent(void* image)
+{
+    return static_cast<osg::Image*>(image)->isImageTranslucent();
+}
+
+/** Set the optional PixelBufferObject used to map the image memory efficiently to graphics memory. */
+void _image_set_pixel_buffer_object(void* image, void* buffer)
+{
+    static_cast<osg::Image*>(image)->setPixelBufferObject(static_cast<osg::PixelBufferObject*>(buffer));
+}
+
+/** Get the PixelBufferObject.*/
+void* _image_get_pixel_buffer_object(void* image)
+{
+    return static_cast<osg::Image*>(image)->getPixelBufferObject();
+}
+
+/** Get the const PixelBufferObject.*/
+const void* _image_get_const_pixel_buffer_object(void* image)
+{
+    return static_cast<osg::Image*>(image)->getPixelBufferObject();
 }
 
 }
