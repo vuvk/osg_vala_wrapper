@@ -291,20 +291,7 @@ unsigned char* _image_data(void* image)
     return static_cast<osg::Image*>(image)->data(); 
 }
 
-/** Raw const image data.
-     * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
-     * take care to access the data per row rather than treating the whole data as a single block. */
-const unsigned char* _image_const_data(void* image)
-{ 
-    return static_cast<osg::Image*>(image)->data(); 
-}
-
 unsigned char* _image_data_ext(void* image_ptr, unsigned int column, unsigned int row /*= 0*/, unsigned int image /*= 0*/)
-{ 
-    return static_cast<osg::Image*>(image_ptr)->data(column, row, image); 
-}
-
-const unsigned char* _image_const_data_ext(void* image_ptr, unsigned int column, unsigned int row /*= 0*/, unsigned int image /*= 0*/)
 { 
     return static_cast<osg::Image*>(image_ptr)->data(column, row, image); 
 }
@@ -461,11 +448,6 @@ unsigned char* _image_get_mipmap_data(void* image, unsigned int mipmap_level)
     return static_cast<osg::Image*>(image)->getMipmapData(mipmap_level);
 }
 
-const unsigned char* _image_get_const_mipmap_data(void* image, unsigned int mipmap_level)
-{
-    return static_cast<osg::Image*>(image)->getMipmapData(mipmap_level);
-}
-
 /** returns false for texture formats that do not support texture subloading */
 bool _image_supports_texture_subloading(void* image)
 {
@@ -486,12 +468,6 @@ void _image_set_pixel_buffer_object(void* image, void* buffer)
 
 /** Get the PixelBufferObject.*/
 void* _image_get_pixel_buffer_object(void* image)
-{
-    return static_cast<osg::Image*>(image)->getPixelBufferObject();
-}
-
-/** Get the const PixelBufferObject.*/
-const void* _image_get_const_pixel_buffer_object(void* image)
 {
     return static_cast<osg::Image*>(image)->getPixelBufferObject();
 }

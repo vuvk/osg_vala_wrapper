@@ -54,15 +54,57 @@ extern bool  _image_valid(void* image);
 [CCode (array_length = false)]
 extern uint8[] _image_data(void* image);
 [CCode (array_length = false)]
-extern uint8[] _image_const_data(void* image);
-[CCode (array_length = false)]
 extern uint8[] _image_data_ext(void* image_ptr, uint column, uint row /*= 0*/, uint image /*= 0*/);
-[CCode (array_length = false)]
-extern uint8[] _image_const_data_ext(void* image_ptr, uint column, uint row /*= 0*/, uint image /*= 0*/);
 extern bool  _image_is_data_contiguous(void* image);
+/** Get the color value for specified texcoord.*/
+extern void* _image_get_color(void* image, uint s, uint t /*=0*/, uint r/*=0*/);
+/** Set the color value for specified texcoord.*/
+extern void _image_set_color(void* image, void* color, uint s, uint t/*=0*/, uint r/*=0*/);
+/** Flip the image horizontally, around s dimension. */
+extern void _image_flip_horizontal(void* image);
+/** Flip the image vertically, around t dimension. */
+extern void _image_flip_vertical(void* image);
+/** Flip the image around the r dimension. Only relevant for 3D textures. */
+extern void _image_flip_depth(void* image);
+/** Ensure image dimensions are a power of two.
+     * Mipmapped textures require the image dimensions to be
+     * power of two and are within the maximum texture size for
+     * the host machine.
+*/
+extern void _image_ensure_valid_size_for_texturing(void* image, GLint max_texture_size);
+extern /*static*/ bool _image_is_packed_type(GLenum type);
+extern /*static*/ GLenum _image_compute_pixel_format(GLenum format);
+extern /*static*/ GLenum _image_compute_format_data_type(GLenum format);
+extern /** return the dimensions of a block of compressed pixels */
+extern /*static*/ void* _image_compute_block_footprint(GLenum pixel_format);
+extern /** return the size in bytes of a block of compressed pixels */
+extern /*static*/ uint _image_compute_block_size(GLenum pixel_format, GLenum packing);
+extern /*static*/ uint _image_compute_num_components(GLenum pixel_format);
+extern /*static*/ uint _image_compute_pixel_size_in_bits(GLenum pixel_format, GLenum type);
+extern /*static*/ uint _image_compute_row_width_in_bytes(int width, GLenum pixel_format, GLenum type, int packing);
+extern /*static*/ uint _image_compute_image_size_in_bytes(int width, int height, int depth, GLenum pixel_format, GLenum type, int packing /*= 1*/, int slice_packing /*= 1*/, int image_packing /*= 1*/);
+extern /*static*/ int _image_roud_up_to_multiple(int s, int pack);
+extern /*static*/ int _image_compute_nearest_power_of_two(int s, float bias/*=0.5f*/);
+extern /*static*/ int _image_compute_number_of_mipmap_levels(int s, int t /*= 1*/, int r /*= 1*/);
+extern bool _image_is_mipmap(void* image);
+extern uint _image_get_num_mipmap_levels(void* image);
+/** Send offsets into data. It is assumed that first mipmap offset (index 0) is 0.*/
+extern void _image_set_mipmap_levels(void* image, uint[] mipmap_data_vector);
+extern void _image_get_mipmap_levels(void* image, [CCode (array_length = false)] uint[] mipmap_data_vector, int* length);
+extern uint _image_get_mipmap_offset(void* image, uint mipmap_level);
+[CCode (array_length = false)]
+extern uint8[] _image_get_mipmap_data(void* image, uint mipmap_level);
+/** returns false for texture formats that do not support texture subloading */
+extern bool _image_supports_texture_subloading(void* image);
+/** Return true if this image is translucent - i.e. it has alpha values that are less 1.0 (when normalized). */
+extern bool _image_is_image_translucent(void* image);
+/** Set the optional PixelBufferObject used to map the image memory efficiently to graphics memory. */
+extern void _image_set_pixel_buffer_object(void* image, void* buffer);
+/** Get the PixelBufferObject.*/
+extern void* _image_get_pixel_buffer_object(void* image);
 
 
-public class Image : OSGObject {
+public class Image : BufferData {
 
     protected Image.from_handle(void* handle) {
         base.from_handle(handle);
@@ -324,24 +366,149 @@ public class Image : OSGObject {
         return _image_data(handle);
     }
 
-    /** Raw const image data.
-        * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
-        * take care to access the data per row rather than treating the whole data as a single block. */
-    public uint8[] const_data() {
-        return _image_const_data(handle);
-    }
-
     public uint8[] data_ext(uint column, uint row = 0, uint image = 0) {
         return _image_data_ext(handle, column, row, image);
-    }
-
-    public uint8[] const_data_ext(uint column, uint row = 0, uint image = 0) {
-        return _image_const_data_ext(handle, column, row, image);
     }
 
     /** return true if the data stored in the image is a contiguous block of data.*/
     public bool is_data_contiguous() {
         return _image_is_data_contiguous(handle);
+    }
+
+    /** Get the color value for specified texcoord.*/
+    public Vec4f get_color(uint s, uint t = 0, uint r = 0) {
+        return new Vec4f.from_handle(_image_get_color(handle, s, t, r));
+    }
+
+    /** Set the color value for specified texcoord.*/
+    public void set_color(Vec4f color, uint s, uint t = 0, uint r = 0) {
+        _image_set_color(handle, color.handle, s, t, r);
+    }
+
+    /** Flip the image horizontally, around s dimension. */
+    public void flip_horizontal() {
+        _image_flip_horizontal(handle);
+    }
+
+    /** Flip the image vertically, around t dimension. */
+    public void flip_vertical() {
+        _image_flip_vertical(handle);
+    }
+
+    /** Flip the image around the r dimension. Only relevant for 3D textures. */
+    public void flip_depth() {
+        _image_flip_depth(handle);
+    }
+
+    /** Ensure image dimensions are a power of two.
+        * Mipmapped textures require the image dimensions to be
+        * power of two and are within the maximum texture size for
+        * the host machine.
+    */
+    public void ensure_valid_size_for_texturing(GLint max_texture_size) {
+        _image_ensure_valid_size_for_texturing(handle, max_texture_size);
+    }
+
+    public static bool is_packed_type(GLenum type) {
+        return _image_is_packed_type(type);
+    }
+
+    public static GLenum compute_pixel_format(GLenum format) {
+        return _image_compute_pixel_format(format);
+    }
+
+    public static GLenum compute_format_data_type(GLenum format) {
+        return _image_compute_format_data_type(format);
+    }
+
+    /** return the dimensions of a block of compressed pixels */
+    public static void* compute_block_footprint(GLenum pixel_format) {
+        // TODO (Vec3i)
+        return null;
+    }
+
+    /** return the size in bytes of a block of compressed pixels */
+    public static uint compute_block_size(GLenum pixel_format, GLenum packing) {
+        return _image_compute_block_size(pixel_format, packing);
+    }
+
+    public static uint compute_num_components(GLenum pixel_format) {
+        return _image_compute_num_components(pixel_format);
+    }
+
+    public static uint compute_pixel_size_in_bits(GLenum pixel_format, GLenum type) {
+        return _image_compute_pixel_size_in_bits(pixel_format, type);
+    }
+
+    public static uint compute_row_width_in_bytes(int width, GLenum pixel_format, GLenum type, int packing) {
+        return _image_compute_row_width_in_bytes(width, pixel_format, type, packing);
+    }
+
+    public static uint compute_image_size_in_bytes(int width, int height, int depth, 
+                                                   GLenum pixel_format, GLenum type, 
+                                                   int packing = 1, int slice_packing = 1, 
+                                                   int image_packing = 1) {
+        return _image_compute_image_size_in_bytes(width, height, depth, pixel_format, type, packing, slice_packing, image_packing);
+    }
+
+    public static int roud_up_to_multiple(int s, int pack) {
+        return _image_roud_up_to_multiple(s, pack);
+    }
+
+    public static int compute_nearest_power_of_two(int s, float bias = 0.5f) {
+        return _image_compute_nearest_power_of_two(s, bias);
+    }
+
+    public static int compute_number_of_mipmap_levels(int s, int t = 1, int r = 1) {
+        return _image_compute_number_of_mipmap_levels(s, t, r);
+    }
+
+    public bool is_mipmap() {
+        return _image_is_mipmap(handle);
+    }
+
+    public uint get_num_mipmap_levels() {
+        return _image_get_num_mipmap_levels(handle);
+    }
+
+    /** Send offsets into data. It is assumed that first mipmap offset (index 0) is 0.*/
+    public void set_mipmap_levels(uint[] mipmap_data_vector) {
+        _image_set_mipmap_levels(handle, mipmap_data_vector);
+    }
+
+    public uint[] get_mipmap_levels() {
+        uint[] mipmap_data_vector = {};
+        _image_get_mipmap_levels(handle, mipmap_data_vector, &mipmap_data_vector.length);
+        return mipmap_data_vector;
+    }
+
+    public uint get_mipmap_offset(uint mipmap_level) {
+        return _image_get_mipmap_offset(handle, mipmap_level);
+    }
+
+    public uint8[] get_mipmap_data(uint mipmap_level) {
+        return _image_get_mipmap_data(handle, mipmap_level);
+    }
+
+    /** returns false for texture formats that do not support texture subloading */
+    public bool supports_texture_subloading() {
+        return _image_supports_texture_subloading(handle);
+    }
+
+    /** Return true if this image is translucent - i.e. it has alpha values that are less 1.0 (when normalized). */
+    public bool is_image_translucent() {
+        return _image_is_image_translucent(handle);
+    }
+
+    /** Set the optional PixelBufferObject used to map the image memory efficiently to graphics memory. */
+    public void set_pixel_buffer_object(void* buffer) {
+        // TODO PixelBufferObject
+    }
+
+    /** Get the PixelBufferObject.*/
+    public void* get_pixel_buffer_object() {
+        // TODO PixelBufferObject
+        return null;        
     }
 
 }
