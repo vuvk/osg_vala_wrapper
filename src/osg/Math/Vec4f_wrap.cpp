@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <osg/Vec3f>
 #include <osg/Vec4f>
 
@@ -54,7 +53,7 @@ bool _vec4f_is_nan(void* vec)
 /** Returns true if all components have values that are not NaN. */
 bool _vec4f_valid(void* vec)
 {
-    return !_vec4f_is_nan(vec);
+    return static_cast<osg::Vec4f*>(vec)->valid();
 }
 
 /** Dot product. */

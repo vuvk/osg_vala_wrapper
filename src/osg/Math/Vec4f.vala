@@ -33,6 +33,10 @@ public class Vec4f : OSGObject {
         this(vec.x(), vec.y(), vec.z(), vec.w());
     }
 
+    public Vec4f.from_vec3f(Vec3f vec, float w) {
+        this(vec.x(), vec.y(), vec.z(), w);
+    }
+
     public Vec4f(float x = 0, float y = 0, float z = 0, float w = 0) {
         this.from_handle(_vec4f_new_from_float(x, y, z, w));
     }
