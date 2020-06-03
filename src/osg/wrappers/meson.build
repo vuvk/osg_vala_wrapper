@@ -8,6 +8,7 @@ sources += files(
     'Drawable_wrap.cpp',
     'Geometry_wrap.cpp',
     'Camera_wrap.cpp',
+    'Image_wrap.cpp',
     'DisplaySettings_wrap.cpp',
     'Outline_wrap.cpp',
     'Viewer_wrap.cpp',

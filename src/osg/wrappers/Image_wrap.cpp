@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <osg/Image>
 
-
 extern "C"
 {
 
@@ -90,7 +89,6 @@ inline void _image_read_pixels(void* image, int x, int y, int width, int height,
     static_cast<osg::Image*>(image)->readPixels(x, y, width, height, pixel_format, type, packing);
 }
 
-
 /** Read the contents of the current bound texture, handling compressed pixelFormats if present.
      * Create memory for storage if required, reuse existing pixel coords if possible.
 */
@@ -166,79 +164,154 @@ inline int _image_r(void* image)
     return static_cast<osg::Image*>(image)->r(); 
 }
 
-void setRowLength(int length);
-inline int getRowLength() const { return _rowLength; }
+inline void _image_set_row_length(void* image, int length)
+{
+    static_cast<osg::Image*>(image)->setRowLength(length);
+}
 
-void setInternalTextureFormat(GLint internalFormat);
-inline GLint getInternalTextureFormat() const { return _internalTextureFormat; }
+inline int _image_get_row_length(void* image) 
+{ 
+    return static_cast<osg::Image*>(image)->getRowLength(); 
+}
 
-void setPixelFormat(GLenum pixelFormat);
-inline GLenum getPixelFormat() const { return _pixelFormat; }
+inline void _image_set_internal_texture_format(void* image, GLint format)
+{
+    static_cast<osg::Image*>(image)->setInternalTextureFormat(format);
+}
 
-void setDataType(GLenum dataType);
-inline GLenum getDataType() const { return _dataType; }
+inline GLint _image_get_internal_texture_format(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getInternalTextureFormat(); 
+}
 
-void setPacking(unsigned int packing) { _packing = packing; }
-inline unsigned int getPacking() const { return _packing; }
+inline void _image_set_pixel_format(void* image, GLenum format)
+{
+    static_cast<osg::Image*>(image)->setPixelFormat(format);
+}
+
+inline GLenum _image_get_pixel_format(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getPixelFormat(); 
+}
+
+inline void _image_set_data_type(void* image, GLenum type)
+{
+    static_cast<osg::Image*>(image)->setDataType(type);
+}
+
+inline GLenum _image_get_data_type(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getDataType(); 
+}
+
+inline void _image_set_packing(void* image, unsigned int packing)
+{
+    static_cast<osg::Image*>(image)->setPacking(packing);
+}
+
+inline unsigned int _image_get_packing(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getPacking(); 
+}
 
 /** Return true of the pixel format is an OpenGL compressed pixel format.*/
-bool isCompressed() const;
+inline bool _image_is_compressed(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->isCompressed(); 
+}
 
 /** Set the pixel aspect ratio, defined as the pixel width divided by the pixel height.*/
-inline void setPixelAspectRatio(float pixelAspectRatio) { _pixelAspectRatio = pixelAspectRatio; }
+inline void _image_set_pixel_aspect_ratio(void* image, float pixel_aspect_ratio)
+{
+    static_cast<osg::Image*>(image)->setPixelAspectRatio(pixel_aspect_ratio);
+}
 
 /** Get the pixel aspect ratio.*/
-inline float getPixelAspectRatio() const { return _pixelAspectRatio; }
+inline float _image_get_pixel_aspect_ratio(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getPixelAspectRatio(); 
+}
 
 /** Return the number of bits required for each pixel. */
-inline unsigned int getPixelSizeInBits() const { return computePixelSizeInBits(_pixelFormat,_dataType); }
+inline unsigned int _image_get_pixel_size_in_bits(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getPixelSizeInBits(); 
+}
 
 /** Return the number of bytes each row of pixels occupies once it has been packed. */
-inline unsigned int getRowSizeInBytes() const { return computeRowWidthInBytes(_s,_pixelFormat,_dataType,_packing); }
+inline unsigned int _image_get_row_size_in_bytes(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getRowSizeInBytes(); 
+}
 
 /** Return the number of bytes between each successive row.
      * Note, getRowSizeInBytes() will only equal getRowStepInBytes() when isDataContiguous() return true. */
-inline unsigned int getRowStepInBytes() const { return computeRowWidthInBytes(_rowLength==0?_s:_rowLength,_pixelFormat,_dataType,_packing); }
+inline unsigned int _image_get_row_step_in_bytes(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getRowStepInBytes(); 
+}
 
 /** Return the number of bytes each image (_s*_t) of pixels occupies. */
-inline unsigned int getImageSizeInBytes() const { return getRowSizeInBytes()*_t; }
+inline unsigned int _image_get_image_size_in_bytes(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getImageSizeInBytes(); 
+}
 
 /** Return the number of bytes between each successive image.
      * Note, getImageSizeInBytes() will only equal getImageStepInBytes() when isDataContiguous() return true. */
-inline unsigned int getImageStepInBytes() const { return getRowStepInBytes()*_t; }
+inline unsigned int _image_get_image_step_in_bytes(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getImageStepInBytes(); 
+}
 
 /** Return the number of bytes the whole row/image/volume of pixels occupies. */
-inline unsigned int getTotalSizeInBytes() const { return getImageSizeInBytes()*_r; }
+inline unsigned int _image_get_total_size_in_bytes(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getTotalSizeInBytes(); 
+}
 
 /** Return the number of bytes the whole row/image/volume of pixels occupies, including all mip maps if included. */
-unsigned int getTotalSizeInBytesIncludingMipmaps() const;
+inline unsigned int _image_get_total_size_in_bytes_including_mipmaps(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->getTotalSizeInBytesIncludingMipmaps(); 
+}
 
 /** Return true if the Image represent a valid and usable imagery.*/
-bool valid() const { return _s!=0 && _t!=0 && _r!=0 && _data!=0 && _dataType!=0; }
+inline bool _image_valid(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->valid(); 
+}
 
 /** Raw image data.
      * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
      * take care to access the data per row rather than treating the whole data as a single block. */
-inline unsigned char* data() { return _data; }
+inline unsigned char* _image_data(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->data(); 
+}
 
 /** Raw const image data.
      * Note, data in successive rows may not be contiguous, isDataContiguous() return false then you should
      * take care to access the data per row rather than treating the whole data as a single block. */
-inline const unsigned char* data() const { return _data; }
-
-inline unsigned char* data(unsigned int column, unsigned int row = 0, unsigned int image = 0)
-{
-    if (!_data) return NULL;
-    return _data+(column*getPixelSizeInBits())/8+row*getRowStepInBytes()+image*getImageSizeInBytes();
+inline const unsigned char* _image_const_data(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->data(); 
 }
 
-inline const unsigned char* data(unsigned int column, unsigned int row = 0, unsigned int image = 0) const
-{
-    if (!_data) return NULL;
-    return _data+(column*getPixelSizeInBits())/8+row*getRowStepInBytes()+image*getImageSizeInBytes();
+inline unsigned char* _image_data_ext(void* image_ptr, unsigned int column, unsigned int row /*= 0*/, unsigned int image /*= 0*/)
+{ 
+    return static_cast<osg::Image*>(image_ptr)->data(column, row, image); 
+}
+
+inline const unsigned char* _image_const_data_ext(void* image_ptr, unsigned int column, unsigned int row /*= 0*/, unsigned int image /*= 0*/)
+{ 
+    return static_cast<osg::Image*>(image_ptr)->data(column, row, image); 
 }
 
 /** return true if the data stored in the image is a contiguous block of data.*/
-bool isDataContiguous() const { return _rowLength==0 || _rowLength==_s; }
+inline bool _image_is_data_contiguous(void* image)
+{ 
+    return static_cast<osg::Image*>(image)->isDataContiguous(); 
+}
 
 }
