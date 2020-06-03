@@ -41,8 +41,8 @@ float _vec4f_g(void* vec) { return static_cast<osg::Vec4f*>(vec)->g(); }
 float _vec4f_b(void* vec) { return static_cast<osg::Vec4f*>(vec)->b(); }
 float _vec4f_a(void* vec) { return static_cast<osg::Vec4f*>(vec)->a(); }
 
-uint _vec4f_as_rgba(void* vec) { return static_cast<osg::Vec4f*>(vec)->asRGBA(); }
-uint _vec4f_as_abgr(void* vec) { return static_cast<osg::Vec4f*>(vec)->asABGR(); }
+unsigned int _vec4f_as_rgba(void* vec) { return static_cast<osg::Vec4f*>(vec)->asRGBA(); }
+unsigned int _vec4f_as_abgr(void* vec) { return static_cast<osg::Vec4f*>(vec)->asABGR(); }
 
 /** Returns true if at least one component has value NaN. */
 bool _vec4f_is_nan(void* vec)
