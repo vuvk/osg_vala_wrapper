@@ -1,8 +1,8 @@
 #!/bin/sh
 
 export VAPI_DIR='vapi/'
-export INCLUDE_DIR=''
-export LIB_DIR=''
+export INCLUDE_DIR='../OpenSceneGraph/include/'
+export LIB_DIR='../OpenSceneGraph/lib/'
 export FLAGS='-O3'
 export OSG='osg'
 export OSG_FX='osgFX'
