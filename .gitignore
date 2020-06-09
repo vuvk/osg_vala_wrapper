@@ -1,5 +1,6 @@
 Models
 Images
 build
+*.o
 *.osgt
 

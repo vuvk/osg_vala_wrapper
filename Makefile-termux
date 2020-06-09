@@ -9,11 +9,12 @@ LDFLAGS=$(LIB) -lglib-2.0 -lgobject-2.0 -losgd -losgDBd -losgFXd -losgViewerd -l
 WRAP_OBJECTS=Vec2i_wrap.o Vec3i_wrap.o Vec4i_wrap.o Vec2f_wrap.o Vec3f_wrap.o Vec4f_wrap.o \
 			 Outline_wrap.o \
 			 BufferData_wrap.o Camera_wrap.o DisplaySettings_wrap.o \
-			 Node_wrap.o Drawable_wrap.o Geometry_wrap.o Group_wrap.o Image_wrap.o Viewer_wrap.o
+			 Node_wrap.o Drawable_wrap.o Geometry_wrap.o Group_wrap.o Image_wrap.o \
+			 View_wrap.o Viewer_wrap.o
 
 EXECUTABLE=osgoutline
 
-all: $(WRAP_OBJECTS) $(EXECUTABLE)
+all: $(WRAP_OBJECTS) $(VALA_OBJECTS) $(EXECUTABLE)
 
 clean: 
 	rm *.o
@@ -58,6 +59,8 @@ Image_wrap.o:
 	$(CC) $(INC) src/osg/wrappers/Image_wrap.cpp $(CFLAGS)
 Node_wrap.o:
 	$(CC) $(INC) src/osg/wrappers/Node_wrap.cpp $(CFLAGS)
+View_wrap.o:
+	$(CC) $(INC) src/osg/wrappers/View_wrap.cpp $(CFLAGS)
 Viewer_wrap.o:
 	$(CC) $(INC) src/osg/wrappers/Viewer_wrap.cpp $(CFLAGS)
 
