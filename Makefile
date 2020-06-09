@@ -1,10 +1,10 @@
 CC=g++
-INC=-I../OpenSceneGraph/include/
-LIB=-L../OpenSceneGraph/lib/
-#INC=
-#LIB=
+#INC=-I../OpenSceneGraph/include/ -I../OpenSceneGraph/build/include/
+#LIB=-L../OpenSceneGraph/lib/ -L../OpenSceneGraph/build/lib/
+INC=
+LIB=
 CFLAGS=-c -Wall
-LDFLAGS=$(LIB) -lglib-2.0 -lgobject-2.0 -losg -losgDB -losgFX -losgViewer -lOpenThreads
+LDFLAGS=$(LIB) -lglib-2.0 -lgobject-2.0 -losg -losgDB -losgFX -losgViewer -losgUtil -losgGA -losgText -lOpenThreads -lGL -lGLU -ldl
 
 WRAP_OBJECTS=Vec2i_wrap.o Vec3i_wrap.o Vec4i_wrap.o Vec2f_wrap.o Vec3f_wrap.o Vec4f_wrap.o \
 			 Outline_wrap.o \
@@ -13,7 +13,7 @@ WRAP_OBJECTS=Vec2i_wrap.o Vec3i_wrap.o Vec4i_wrap.o Vec2f_wrap.o Vec3f_wrap.o Ve
 
 EXECUTABLE=osgoutline
 
-all: $(WRAP_OBJECTS) $(EXECUTABLE)
+all: $(WRAP_OBJECTS) $(VALA_OBJECTS) $(EXECUTABLE)
 
 clean: 
 	rm *.o
