@@ -1,5 +1,6 @@
 subdir('wrappers')
 subdir('Math')
+subdir('Viewer')
 
 sources += files(
     'OSGObject.vala',
@@ -13,7 +14,6 @@ sources += files(
     'Geometry.vala',
     'Camera.vala',
     'DisplaySettings.vala',
-    'Viewer.vala',
 )
 
 subdir('FX')

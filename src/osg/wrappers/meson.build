@@ -9,6 +9,4 @@ sources += files(
     'Geometry_wrap.cpp',
     'Camera_wrap.cpp',
     'DisplaySettings_wrap.cpp',
-    'View_wrap.cpp',
-    'Viewer_wrap.cpp',
 )

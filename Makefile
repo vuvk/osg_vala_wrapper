@@ -60,9 +60,9 @@ Image_wrap.o:
 Node_wrap.o:
 	$(CC) $(INC) src/osg/wrappers/Node_wrap.cpp $(CFLAGS)
 View_wrap.o:
-	$(CC) $(INC) src/osg/wrappers/View_wrap.cpp $(CFLAGS)
+	$(CC) $(INC) src/osg/Viewer/View_wrap.cpp $(CFLAGS)
 Viewer_wrap.o:
-	$(CC) $(INC) src/osg/wrappers/Viewer_wrap.cpp $(CFLAGS)
+	$(CC) $(INC) src/osg/Viewer/Viewer_wrap.cpp $(CFLAGS)
 
 #################
 # Vala side now #
@@ -89,7 +89,7 @@ VALA_SOURCES=src/osg/OSGObject.vala \
 			src/osg/Image.vala \
 			src/osg/Node.vala \
 			src/osg/Transform.vala \
-			src/osg/Viewer.vala \
+			src/osg/Viewer/Viewer.vala \
 			src/osgoutline.vala
 
 VALA_OBJECTS=OSGObject.vala.o \
